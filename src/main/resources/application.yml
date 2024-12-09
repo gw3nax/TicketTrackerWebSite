@@ -1,0 +1,61 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: TicketTrackerWebSite
+  jackson:
+    time-zone: UTC
+  datasource:
+    url: jdbc:postgresql://localhost:5434/webSite
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      format_sql: true
+    show-sql: true
+  liquibase:
+    change-log: migrations/db.changelog-master.yml
+  kafka:
+    consumer:
+      properties:
+        spring.json.trusted.packages: "ru.gw3nax.tickettrackerwebsite.dto.response,java.util,java.lang,*"
+
+server:
+  port: 8081
+
+app:
+  topic-name: website-client-1-responses
+
+logging:
+  level:
+    org.apache.kafka: OFF
+    org.springframework.kafka: OFF
+
+kafka-producer:
+  acks: all
+  batch-size: 1048576
+  max-request-size: 1048576
+  linger-ms: 5000
+  bootstrap-server: 127.0.0.1:9092
+  topic-prop:
+    name: queries
+    partitions: 1
+    replicas: 1
+
+kafka-consumer:
+  bootstrap-server: 127.0.0.1:9092
+  enable-auto-commit: false
+  fetch-max-byte: 1048576
+  max-poll-records: 5
+  max-poll-interval: 5
+  allow-auto-create: false
+  group-id: listen
+  isolation-level: read_committed
+  topic-prop:
+    name: responses
+    partitions: 1
+    replicas: 1
+
+
+
