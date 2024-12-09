@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.gw3nax.tickettrackerwebsite.dto.request.Action;
 import ru.gw3nax.tickettrackerwebsite.dto.request.FlightRequest;
 import ru.gw3nax.tickettrackerwebsite.entity.FlightRequestEntity;
+import ru.gw3nax.tickettrackerwebsite.exception.exceptions.FlightNotFoundException;
 import ru.gw3nax.tickettrackerwebsite.producer.QueryProducer;
 import ru.gw3nax.tickettrackerwebsite.repository.FlightRequestRepository;
 
@@ -44,7 +45,7 @@ public class QueryService {
     public void deleteQuery(Long queryId) {
         log.info("Sending update for flight request {}", queryId);
         var optionalFlightRequestEntity = flightRequestRepository.findById(queryId);
-        if (optionalFlightRequestEntity.isEmpty()) throw new RuntimeException("No flight request found");
+        if (optionalFlightRequestEntity.isEmpty()) throw new FlightNotFoundException("No flight request found");
         var flightRequestEntity = optionalFlightRequestEntity.get();
         flightRequestRepository.deleteById(queryId);
         var flightRequest = Objects.requireNonNull(conversionService.convert(flightRequestEntity, FlightRequest.class));

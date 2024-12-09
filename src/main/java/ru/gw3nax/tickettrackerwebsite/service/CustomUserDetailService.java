@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.gw3nax.tickettrackerwebsite.entity.UserEntity;
+import ru.gw3nax.tickettrackerwebsite.exception.exceptions.UserNotFoundException;
 import ru.gw3nax.tickettrackerwebsite.repository.UserRepository;
 
 import java.util.Optional;
@@ -18,7 +18,7 @@ public class CustomUserDetailService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) {
         Optional<UserEntity> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             UserEntity userObj = user.get();
@@ -28,7 +28,7 @@ public class CustomUserDetailService implements UserDetailsService {
                     .roles(getRole(userObj))
                     .build();
         } else {
-            throw new UsernameNotFoundException(email);
+            throw new UserNotFoundException(email);
         }
     }
 

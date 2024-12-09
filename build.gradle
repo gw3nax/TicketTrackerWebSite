@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.4.0'
     id 'io.spring.dependency-management' version '1.1.6'
+    id 'jacoco'
 }
 
 group = 'ru.gw3nax'
@@ -71,4 +72,52 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+jacoco {
+    toolVersion = "0.8.10"
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.70
+            }
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [
+                        "ru/gw3nax/tickettrackerwebsite/configuration/*",
+                        "ru/gw3nax/tickettrackerwebsite/dto/*",
+                        "ru/gw3nax/tickettrackerwebsite/entity/*",
+                        "ru/gw3nax/tickettrackerwebsite/mapper/*",
+                        "ru/gw3nax/tickettrackerwebsite/exception/*",
+
+                ])
+            }))
+        }
+    }
+}
+
+
+tasks.jacocoTestReport {
+    dependsOn tasks.test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "ru/gw3nax/tickettrackerwebsite/configuration/*",
+                    "ru/gw3nax/tickettrackerwebsite/dto/*",
+                    "ru/gw3nax/tickettrackerwebsite/entity/*",
+                    "ru/gw3nax/tickettrackerwebsite/mapper/*",
+                    "ru/gw3nax/tickettrackerwebsite/exception/dto/*",
+                    "ru/gw3nax/tickettrackerwebsite/exception/exceptions/*"
+            ])
+        }))
+    }
 }

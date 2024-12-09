@@ -45,14 +45,6 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @Operation(summary = "Get all users", description = "Returns a list of all users")
-    @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of users")
-    @GetMapping
-    public ResponseEntity<List<UserEntity>> getAllUsers() {
-        List<UserEntity> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
-    }
-
     @Operation(summary = "User home page", description = "Returns the home page for the user")
     @GetMapping("/home")
     public String getUserHomePage() {
