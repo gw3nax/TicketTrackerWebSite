@@ -40,7 +40,7 @@ public class QueryController {
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
     @PostMapping("/search")
-    public String postQuery(@RequestBody FlightRequest flightRequest) {
+    public String postQuery(@ModelAttribute FlightRequest flightRequest) {
         queryService.postQuery(flightRequest);
         return "redirect:/users/home";
     }

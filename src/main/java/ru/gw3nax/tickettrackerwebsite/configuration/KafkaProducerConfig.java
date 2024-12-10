@@ -37,20 +37,18 @@ public class KafkaProducerConfig {
     @Bean
     public DefaultKafkaProducerFactory<String, FlightRequest> kafkaProducerFactory() {
         Map<String, Object> prop = new HashMap<>();
-
         prop.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.bootstrapServer());
-
         prop.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         prop.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-
         prop.put(ProducerConfig.BATCH_SIZE_CONFIG, kafkaProperties.batchSize());
         prop.put(ProducerConfig.MAX_REQUEST_SIZE_CONFIG, kafkaProperties.maxRequestSize());
         prop.put(ProducerConfig.LINGER_MS_CONFIG, kafkaProperties.lingerMs());
-
         prop.put(ProducerConfig.ACKS_CONFIG, kafkaProperties.acks());
-
         prop.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, RoundRobinPartitioner.class);
-
+        prop.put("security.protocol", "SASL_PLAINTEXT");
+        prop.put("sasl.mechanism", "PLAIN");
+        prop.put("sasl.jaas.config", "org.apache.kafka.common.security.plain.PlainLoginModule required "
+                + "username=\"" + kafkaProperties.credential().username() + "\" password=\"" + kafkaProperties.credential().password()+ "\";");
         return new DefaultKafkaProducerFactory<>(prop);
     }
 

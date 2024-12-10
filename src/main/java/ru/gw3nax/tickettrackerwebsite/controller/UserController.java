@@ -5,14 +5,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ru.gw3nax.tickettrackerwebsite.dto.request.UserRequest;
-import ru.gw3nax.tickettrackerwebsite.entity.UserEntity;
 import ru.gw3nax.tickettrackerwebsite.service.UserService;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/users")
@@ -40,9 +39,9 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Invalid user input")
     })
     @PostMapping("/register")
-    public String registerUser(@RequestBody UserRequest user) {
+    public String registerUser(@ModelAttribute UserRequest user) {
         userService.createUser(user);
-        return "redirect:/login";
+        return "redirect:/users/login";
     }
 
     @Operation(summary = "User home page", description = "Returns the home page for the user")

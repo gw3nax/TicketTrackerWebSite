@@ -123,7 +123,6 @@
         flightResponse.data.forEach(flight => {
             const row = table.insertRow();
             row.innerHTML = `
-                <td>${flightResponse.userId || '-'}</td>
                 <td>${flight.fromPlace || '-'}</td>
                 <td>${flight.toPlace || '-'}</td>
                 <td>${flight.departureAt || '-'}</td>
