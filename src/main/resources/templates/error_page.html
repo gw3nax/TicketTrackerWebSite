@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .error-container {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px 40px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .error-title {
+            font-size: 24px;
+            color: #dc3545;
+            margin-bottom: 16px;
+        }
+        .error-message {
+            font-size: 16px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+        .back-button {
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="error-container">
+    <div class="error-title">Oops! An Error Occurred</div>
+    <div class="error-message" th:text="${errorMessage}">Default error message</div>
+    <a href="/users/home" class="back-button">Go to Home</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск билетов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+        }
+        .sidebar {
+            width: 20%;
+            padding: 10px;
+            border-right: 1px solid #ccc;
+        }
+        .main-content {
+            width: 80%;
+            padding: 10px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table td {
+            border: none;
+        }
+        .table th, .table td {
+            border: 1px solid #ccc;
+            padding: 5px;
+            text-align: center;
+        }
+        .table th {
+            background-color: #f0f0f0;
+        }
+        .button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h3>USERNAME</h3>
+        <a href="/flights/search">search tickets</a>
+        <br><br>
+        <a href="/users/home">Back to home page</a>
+    </div>
+
+    <!-- Main content -->
+    <div class="main-content">
+        <h1>Билеты, которые вы ищите</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>from place</th>
+                <th>to place</th>
+                <th>from date</th>
+                <th>to date</th>
+                <th>currency</th>
+                <th>price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ticket : ${tickets}">
+                <td th:text="${ticket.fromPlace}">Москва</td>
+                <td th:text="${ticket.toPlace}">Владивосток</td>
+                <td th:text="${ticket.fromDate}">2024-12-12</td>
+                <td th:text="${ticket.toDate}">2024-12-20</td>
+                <td th:text="${ticket.currency}">RUB</td>
+                <td th:text="${ticket.price}">12445</td>
+                <td>
+                    <form th:action="@{/flights/queries}" method="post">
+                        <input type="hidden" name="_method" value="delete"/>
+                        <input type="hidden" name="queryId" th:value="${ticket.id}"/>
+                        <button type="submit" class="button">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

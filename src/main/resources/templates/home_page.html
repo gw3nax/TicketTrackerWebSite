@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Flight Data</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .container-fluid {
+            display: flex;
+            height: 100vh;
+        }
+
+        aside {
+            width: 20%;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+
+        aside h2 {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        aside ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        aside ul li {
+            margin: 10px 0;
+        }
+
+        aside ul li a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        aside ul li a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            width: 80%;
+            padding: 20px;
+        }
+
+        table th {
+            background-color: #f0f0f0;
+        }
+
+        table td a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        table td a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <aside>
+        <h2 th:text="${username}">USERNAME</h2>
+        <ul>
+            <li><a th:href="@{/flights/search}">Search Tickets</a></li>
+            <li><a th:href="@{/flights/queries}">Show Queries</a></li>
+        </ul>
+        <a th:href="@{/logout}">Logout</a>
+    </aside>
+
+    <main>
+        <h1>Flight Data</h1>
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>User ID</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Departure</th>
+                <th>Price</th>
+                <th>Airline</th>
+                <th>Link</th>
+            </tr>
+            </thead>
+            <tbody id="flightsTable">
+            </tbody>
+        </table>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+<script>
+    let stompClient = null;
+
+    function connect() {
+        const socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, () => {
+            console.log('WebSocket connection established');
+
+            stompClient.subscribe('/topic/flights', (message) => {
+                const flightResponse = JSON.parse(message.body);
+                console.log('Received flight response:', flightResponse);
+
+                addFlightsToTable(flightResponse);
+            });
+        });
+    }
+
+    function addFlightsToTable(flightResponse) {
+        const table = document.getElementById('flightsTable');
+
+        flightResponse.data.forEach(flight => {
+            const row = table.insertRow();
+            row.innerHTML = `
+                <td>${flight.fromPlace || '-'}</td>
+                <td>${flight.toPlace || '-'}</td>
+                <td>${flight.departureAt || '-'}</td>
+                <td>${flight.price ? flight.price.toFixed(2) : '-'}</td>
+                <td>${flight.airline || '-'}</td>
+                <td>${flight.link ? `<a href="http://aviasales.ru${flight.link}" target="_blank">Details</a>` : '-'}</td>
+            `;
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', connect);
+</script>
+</body>
+</html>
