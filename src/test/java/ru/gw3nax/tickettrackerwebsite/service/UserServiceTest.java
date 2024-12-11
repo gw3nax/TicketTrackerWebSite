@@ -57,7 +57,6 @@ class UserServiceTest {
 
     @Test
     void createUser_Success() {
-        // Mock setup
         when(userRepository.existsByEmail(userRequest.getEmail())).thenReturn(false);
         when(conversionService.convert(userRequest, UserEntity.class)).thenReturn(userEntity);
         when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
