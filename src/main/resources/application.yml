@@ -37,17 +37,17 @@ kafka-producer:
   batch-size: 1048576
   max-request-size: 1048576
   linger-ms: 5000
-  bootstrap-server: 127.0.0.1:9092
+  bootstrap-server: host.docker.internal:9092
   credential:
     username: admin
-    password: admin_secret
+    password: admin-secret
   topic-prop:
     name: queries
     partitions: 1
     replicas: 1
 
 kafka-consumer:
-  bootstrap-server: 127.0.0.1:9092
+  bootstrap-server: host.docker.internal:9092
   enable-auto-commit: false
   fetch-max-byte: 1048576
   max-poll-records: 5
@@ -57,7 +57,7 @@ kafka-consumer:
   isolation-level: read_committed
   credential:
     username: admin
-    password: admin_secret
+    password: admin-secret
   topic-prop:
     name: responses
     partitions: 1
